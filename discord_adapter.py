@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
 import re
 from typing import Optional
 
@@ -18,9 +19,8 @@ from stream_consumer import DiscordStreamConsumer
 
 logger = logging.getLogger(__name__)
 
-# Discord slash command name rules: lowercase, 1-32 chars, only a-z 0-9 - _
 _DISCORD_NAME_RE = re.compile(r"[^a-z0-9\-]")
-_BOT_ONLY_COMMANDS = {"reset", "stop", "status", "sessions", "resume"}
+_BOT_ONLY_COMMANDS = {"reset", "stop", "status", "sessions", "resume", "model", "effort", "session-name"}
 
 
 def _to_discord_name(cc_name: str) -> str:
@@ -30,23 +30,14 @@ def _to_discord_name(cc_name: str) -> str:
 
 
 def _build_allowed_mentions() -> discord.AllowedMentions:
-    return discord.AllowedMentions(
-        everyone=False,
-        roles=False,
-        users=True,
-        replied_user=True,
-    )
+    return discord.AllowedMentions(everyone=False, roles=False, users=True, replied_user=True)
 
 
 async def _probe_slash_commands(claude_binary: str, working_dir: str) -> list[str]:
-    """Run claude once to extract slash_commands from the init event."""
     cmd = [claude_binary, "-p", "--output-format", "stream-json", "--verbose", "hi"]
     try:
         proc = await asyncio.create_subprocess_exec(
-            *cmd,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.DEVNULL,
-            cwd=working_dir,
+            *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.DEVNULL, cwd=working_dir,
         )
         assert proc.stdout
         commands_list: list[str] = []
@@ -82,9 +73,7 @@ class ClaudeCodeBot:
         intents.guild_messages = True
 
         self._bot = commands.Bot(
-            command_prefix="!",
-            intents=intents,
-            allowed_mentions=_build_allowed_mentions(),
+            command_prefix="!", intents=intents, allowed_mentions=_build_allowed_mentions(),
         )
 
         self._setup_events()
@@ -98,10 +87,7 @@ class ClaudeCodeBot:
             logger.info("Connected as %s (id=%s)", bot.user, bot.user.id if bot.user else "?")
             self.session_mgr.start_cleanup_loop()
 
-            # Probe Claude Code for slash commands and register them dynamically
-            cc_commands = await _probe_slash_commands(
-                self.config.claude_binary, self.config.claude_working_dir
-            )
+            cc_commands = await _probe_slash_commands(self.config.claude_binary, self.config.claude_working_dir)
             registered = self._register_cc_commands(cc_commands)
             logger.info("Registered %d Claude Code slash commands", registered)
 
@@ -128,16 +114,13 @@ class ClaudeCodeBot:
             if not is_dm:
                 if not self.security.is_channel_allowed(channel_id):
                     return
-
                 mentioned = bot.user in message.mentions
                 in_tracked = channel_id in self._threads
-
                 if self.config.require_mention and not mentioned and not in_tracked:
                     return
 
             if not self.security.is_user_allowed(str(message.author.id), message.author):
                 return
-
             if not self.security.rate_limiter.check(str(message.author.id)):
                 await message.reply("Rate limited. Please wait a moment.", delete_after=5)
                 return
@@ -145,7 +128,6 @@ class ClaudeCodeBot:
             await self._handle_message(message)
 
     def _setup_bot_commands(self):
-        """Register bot-specific commands (not forwarded to Claude Code)."""
         tree = self._bot.tree
 
         @tree.command(name="reset", description="Reset Claude Code session for this channel")
@@ -174,11 +156,15 @@ class ClaudeCodeBot:
                 await interaction.response.send_message("No active session.", ephemeral=True)
                 return
             lines = [
+                f"**Name:** {status['name']}",
+                f"**Model:** {status['model']}",
+                f"**Effort:** {status['effort']}",
                 f"**Connected:** {'yes' if status['connected'] else 'no'}",
                 f"**Messages:** {status['messages']}",
                 f"**Cost:** ${status['cost_usd']}",
                 f"**Running:** {'yes' if status['running'] else 'no'}",
                 f"**Idle:** {status['idle_minutes']} min",
+                f"**Queued:** {status['queued']}",
             ]
             await interaction.response.send_message("\n".join(lines), ephemeral=True)
 
@@ -222,10 +208,9 @@ class ClaudeCodeBot:
                         await interaction.response.send_message(f"No session found matching `{full_id}`", ephemeral=True)
                         return
                     if len(match) > 1:
-                        await interaction.response.send_message(f"Ambiguous: {len(match)} sessions match `{full_id}`. Use more characters.", ephemeral=True)
+                        await interaction.response.send_message(f"Ambiguous: {len(match)} sessions match. Use more characters.", ephemeral=True)
                         return
                     full_id = match[0].session_id
-
                 await interaction.response.defer()
                 await self.session_mgr.resume(str(interaction.channel_id), full_id)
                 await interaction.followup.send(f"Resumed session `{full_id[:8]}...`")
@@ -236,16 +221,66 @@ class ClaudeCodeBot:
                 else:
                     await interaction.response.send_message(f"Error: {e}", ephemeral=True)
 
+        @tree.command(name="model", description="Switch Claude model for this session")
+        @app_commands.describe(name="Model name (e.g., sonnet, opus, haiku)")
+        async def cmd_model(interaction: discord.Interaction, name: str):
+            if not self._check_auth(interaction):
+                await interaction.response.send_message("Not authorized.", ephemeral=True)
+                return
+            session = self.session_mgr.get_session(str(interaction.channel_id))
+            if not session or not session.gateway.connected:
+                await interaction.response.send_message("No active session. Send a message first.", ephemeral=True)
+                return
+            try:
+                await session.gateway.set_model(name)
+                session.model_override = name
+                await interaction.response.send_message(f"Model switched to **{name}**.")
+            except Exception as e:
+                await interaction.response.send_message(f"Error: {e}", ephemeral=True)
+
+        @tree.command(name="effort", description="Set effort level for this session")
+        @app_commands.describe(level="Effort level")
+        @app_commands.choices(level=[
+            app_commands.Choice(name="low", value="low"),
+            app_commands.Choice(name="medium", value="medium"),
+            app_commands.Choice(name="high", value="high"),
+            app_commands.Choice(name="max", value="max"),
+        ])
+        async def cmd_effort(interaction: discord.Interaction, level: app_commands.Choice[str]):
+            if not self._check_auth(interaction):
+                await interaction.response.send_message("Not authorized.", ephemeral=True)
+                return
+            session = self.session_mgr.get_session(str(interaction.channel_id))
+            if session:
+                session.effort_override = level.value
+            await interaction.response.send_message(
+                f"Effort set to **{level.value}**. Takes effect on next new session or `/reset`."
+            )
+
+        @tree.command(name="session-name", description="Name the current session")
+        @app_commands.describe(name="Session name")
+        async def cmd_session_name(interaction: discord.Interaction, name: str):
+            if not self._check_auth(interaction):
+                await interaction.response.send_message("Not authorized.", ephemeral=True)
+                return
+            session = self.session_mgr.get_session(str(interaction.channel_id))
+            if not session or not session.gateway.session_id:
+                await interaction.response.send_message("No active session.", ephemeral=True)
+                return
+            try:
+                await session.gateway.rename_current_session(name)
+                session.custom_name = name
+                await interaction.response.send_message(f"Session named: **{name}**")
+            except Exception as e:
+                await interaction.response.send_message(f"Error: {e}", ephemeral=True)
+
     def _register_cc_commands(self, cc_commands: list[str]) -> int:
-        """Dynamically register Discord slash commands for all Claude Code commands."""
         tree = self._bot.tree
         count = 0
-
         for cc_name in cc_commands:
             discord_name = _to_discord_name(cc_name)
             if not discord_name or discord_name in _BOT_ONLY_COMMANDS:
                 continue
-            # Discord limits to 100 slash commands per bot
             if count >= 95:
                 logger.warning("Approaching Discord slash command limit, skipping remaining")
                 break
@@ -254,7 +289,6 @@ class ClaudeCodeBot:
                 count += 1
             except Exception as e:
                 logger.warning("Failed to register /%s: %s", discord_name, e)
-
         return count
 
     def _add_cc_command(self, tree: app_commands.CommandTree, discord_name: str, cc_name: str):
@@ -283,6 +317,13 @@ class ClaudeCodeBot:
             prompt = prompt.replace(f"<@{self._bot.user.id}>", "").strip()
             prompt = prompt.replace(f"<@!{self._bot.user.id}>", "").strip()
 
+        # Handle attachments
+        if message.attachments and self.config.allow_attachments:
+            attachment_paths = await self._save_attachments(message.attachments)
+            if attachment_paths:
+                paths_text = "\n".join(f"- {p}" for p in attachment_paths)
+                prompt = f"{prompt}\n\n[Attached files saved to working directory:]\n{paths_text}"
+
         if not prompt:
             return
 
@@ -293,6 +334,25 @@ class ClaudeCodeBot:
             pass
 
         await self._run_claude(message.channel, prompt, reference=reference, message=message)
+
+    async def _save_attachments(self, attachments: list[discord.Attachment]) -> list[str]:
+        base_dir = self.config.claude_working_dir or os.getcwd()
+        upload_dir = os.path.join(base_dir, ".discord-uploads")
+        os.makedirs(upload_dir, exist_ok=True)
+        max_size = self.config.max_attachment_size_mb * 1024 * 1024
+        paths = []
+        for att in attachments:
+            if att.size > max_size:
+                logger.warning("Attachment %s too large (%d bytes), skipping", att.filename, att.size)
+                continue
+            safe_name = att.filename.replace("/", "_").replace("\\", "_")
+            filepath = os.path.join(upload_dir, f"{att.id}_{safe_name}")
+            try:
+                await att.save(filepath)
+                paths.append(filepath)
+            except Exception as e:
+                logger.warning("Failed to save attachment %s: %s", att.filename, e)
+        return paths
 
     async def _run_claude(
         self,
@@ -306,12 +366,34 @@ class ClaudeCodeBot:
         session = await self.session_mgr.get_or_create(channel_id)
 
         if session.running:
-            text = "Still processing a previous message. Use `/stop` to cancel."
-            if interaction:
-                await interaction.followup.send(text, ephemeral=True)
-            elif message:
-                await message.reply(text, delete_after=10)
-            return
+            if self.config.message_queue_size > 0:
+                try:
+                    session.message_queue.put_nowait({
+                        "prompt": prompt, "channel": channel,
+                        "reference": reference, "message": message,
+                        "interaction": interaction,
+                    })
+                    pos = session.message_queue.qsize()
+                    text = f"Queued (position {pos})."
+                    if interaction:
+                        await interaction.followup.send(text, ephemeral=True)
+                    elif message:
+                        await message.reply(text, delete_after=10)
+                    return
+                except asyncio.QueueFull:
+                    text = "Queue is full. Please wait."
+                    if interaction:
+                        await interaction.followup.send(text, ephemeral=True)
+                    elif message:
+                        await message.reply(text, delete_after=10)
+                    return
+            else:
+                text = "Still processing a previous message. Use `/stop` to cancel."
+                if interaction:
+                    await interaction.followup.send(text, ephemeral=True)
+                elif message:
+                    await message.reply(text, delete_after=10)
+                return
 
         if self.session_mgr.active_count() >= self.config.session_max_concurrent:
             text = "Too many concurrent sessions. Please wait."
@@ -331,25 +413,18 @@ class ClaudeCodeBot:
         session.message_count += 1
 
         consumer = DiscordStreamConsumer(
-            channel=channel,
-            reference=reference,
-            config=self.config,
-            interaction=interaction,
+            channel=channel, reference=reference,
+            config=self.config, interaction=interaction,
         )
 
         is_error = False
         try:
             if interaction:
-                result = await session.gateway.query(
-                    prompt=prompt,
-                    on_event=consumer.on_event,
-                )
+                result = await session.gateway.query(prompt=prompt, on_event=consumer.on_event)
             else:
                 async with channel.typing():
-                    result = await session.gateway.query(
-                        prompt=prompt,
-                        on_event=consumer.on_event,
-                    )
+                    result = await session.gateway.query(prompt=prompt, on_event=consumer.on_event)
+
             session.total_cost_usd += result.cost_usd
             is_error = result.is_error
 
@@ -375,7 +450,6 @@ class ClaudeCodeBot:
                     pass
         finally:
             session.running = False
-            session.runner = None
 
         if not is_error:
             self._threads.mark(channel_id)
@@ -387,6 +461,24 @@ class ClaudeCodeBot:
                 await message.add_reaction(emoji)
             except discord.HTTPException:
                 pass
+
+        # Process queued messages
+        if self.config.message_queue_size > 0 and not session.message_queue.empty():
+            asyncio.create_task(self._process_queue(session, channel_id))
+
+    async def _process_queue(self, session, channel_id: str) -> None:
+        while not session.message_queue.empty():
+            while session.running:
+                await asyncio.sleep(0.5)
+            try:
+                item = session.message_queue.get_nowait()
+            except asyncio.QueueEmpty:
+                break
+            await self._run_claude(
+                channel=item["channel"], prompt=item["prompt"],
+                reference=item["reference"], message=item["message"],
+                interaction=item["interaction"],
+            )
 
     async def start(self):
         if not self.config.discord_token:

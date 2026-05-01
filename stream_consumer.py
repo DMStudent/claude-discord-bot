@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import time
 from typing import Optional
 
@@ -34,15 +35,21 @@ class DiscordStreamConsumer:
         self._interaction = interaction
         self._messages: list[discord.Message] = []
         self._current_message: Optional[discord.Message] = None
-        # _accumulated: used for streaming display, may be reset on overflow
         self._accumulated = ""
-        # _full_text: complete text from all text_deltas, never reset
         self._full_text = ""
         self._last_edit_time = 0.0
         self._flood_strikes = 0
         self._edit_disabled = False
         self._tool_status_msg: Optional[discord.Message] = None
         self._finalized = False
+        # Thinking
+        self._thinking_accumulated = ""
+        self._thinking_message: Optional[discord.Message] = None
+        self._last_thinking_edit_time = 0.0
+        # Task progress
+        self._task_status_msg: Optional[discord.Message] = None
+        # File tracking
+        self._modified_files: list[str] = []
 
     async def on_event(self, event: ClaudeEvent) -> None:
         if self._finalized:
@@ -55,8 +62,24 @@ class DiscordStreamConsumer:
                 self._full_text += text
                 await self._maybe_edit()
 
+        elif event.thinking_delta and self._config.show_thinking:
+            text = strip_ansi(event.thinking_delta)
+            if text:
+                self._thinking_accumulated += text
+                await self._show_thinking()
+
         elif event.tool_use and event.tool_use.get("name"):
             await self._show_tool_status(event.tool_use)
+            if self._config.send_file_outputs:
+                name = event.tool_use.get("name", "")
+                inp = event.tool_use.get("input", {})
+                if name in ("Write", "Edit") and isinstance(inp, dict) and inp.get("file_path"):
+                    path = inp["file_path"]
+                    if path not in self._modified_files:
+                        self._modified_files.append(path)
+
+        elif event.type == "task":
+            await self._show_task_progress(event)
 
         elif event.type == "result":
             await self._finalize(event)
@@ -110,7 +133,6 @@ class DiscordStreamConsumer:
                 logger.warning("Rate limited (strike %d/%d)", self._flood_strikes, MAX_FLOOD_STRIKES)
                 if self._flood_strikes >= MAX_FLOOD_STRIKES:
                     self._edit_disabled = True
-                    logger.warning("Progressive edits disabled due to rate limiting")
             else:
                 logger.warning("Failed to edit message: %s", e)
 
@@ -135,17 +157,61 @@ class DiscordStreamConsumer:
         except discord.HTTPException:
             pass
 
+    async def _show_thinking(self) -> None:
+        now = time.monotonic()
+        if now - self._last_thinking_edit_time < self._config.edit_interval * 2:
+            return
+        display = self._thinking_accumulated
+        if len(display) > SAFE_LIMIT - 10:
+            display = display[:SAFE_LIMIT - 13] + "..."
+        display = f"||{display}||"
+        try:
+            if self._thinking_message:
+                await self._thinking_message.edit(content=display)
+            else:
+                self._thinking_message = await self._channel.send(display)
+        except discord.HTTPException:
+            pass
+        self._last_thinking_edit_time = now
+
+    async def _show_task_progress(self, event: ClaudeEvent) -> None:
+        if event.subtype == "started":
+            text = f"⚙️ **Task started:** {event.task_description}"
+        elif event.subtype == "progress":
+            tool_info = f" (using {event.task_last_tool})" if event.task_last_tool else ""
+            text = f"⚙️ **Task in progress:** {event.task_description}{tool_info}"
+        elif event.subtype == "notification":
+            emoji = {"completed": "✅", "failed": "❌", "stopped": "⛔"}.get(event.task_status, "❓")
+            text = f"{emoji} **Task {event.task_status}:** {event.task_summary or event.task_description}"
+        else:
+            return
+        try:
+            if self._task_status_msg:
+                await self._task_status_msg.edit(content=text[:SAFE_LIMIT])
+            else:
+                self._task_status_msg = await self._channel.send(text[:SAFE_LIMIT])
+        except discord.HTTPException:
+            pass
+
     async def _finalize(self, event: ClaudeEvent) -> None:
         self._finalized = True
 
-        if self._tool_status_msg:
+        for msg in [self._tool_status_msg, self._task_status_msg]:
+            if msg:
+                try:
+                    await msg.delete()
+                except discord.HTTPException:
+                    pass
+
+        if self._thinking_message and self._thinking_accumulated:
+            thinking = self._thinking_accumulated
+            if len(thinking) > SAFE_LIMIT - 10:
+                thinking = thinking[:SAFE_LIMIT - 13] + "..."
             try:
-                await self._tool_status_msg.delete()
+                await self._thinking_message.edit(content=f"||{thinking}||")
             except discord.HTTPException:
                 pass
 
-        # Pick the most complete text: prefer full streamed text over result
-        # event.result may only contain the last turn in multi-tool responses
         candidates = [self._full_text, event.result or "", self._accumulated]
         final_text = max(candidates, key=len)
         final_text = strip_ansi(final_text)
@@ -163,7 +229,6 @@ class DiscordStreamConsumer:
 
         chunks = truncate_message(final_text)
 
-        # Append cost to the last chunk if it fits
         if cost_suffix and chunks:
             if len(chunks[-1]) + len(cost_suffix) <= SAFE_LIMIT:
                 chunks[-1] += cost_suffix
@@ -171,7 +236,6 @@ class DiscordStreamConsumer:
                 chunks.append(cost_suffix)
 
         if self._messages:
-            # Re-edit all existing messages with correct content, send new ones if needed
             for i, chunk in enumerate(chunks):
                 if i < len(self._messages):
                     try:
@@ -183,14 +247,12 @@ class DiscordStreamConsumer:
                         await self._channel.send(chunk[:SAFE_LIMIT])
                     except discord.HTTPException as e:
                         logger.warning("Failed to send chunk %d in finalize: %s", i, e)
-            # Delete extra messages if final text is shorter than what was sent
             for i in range(len(chunks), len(self._messages)):
                 try:
                     await self._messages[i].delete()
                 except discord.HTTPException:
                     pass
         else:
-            # No messages sent during streaming, send everything now
             for i, chunk in enumerate(chunks):
                 try:
                     if self._interaction and i == 0:
@@ -201,3 +263,18 @@ class DiscordStreamConsumer:
                         await self._channel.send(chunk[:SAFE_LIMIT], reference=ref)
                 except discord.HTTPException as e:
                     logger.warning("Failed to send chunk %d in finalize: %s", i, e)
+
+        if self._config.send_file_outputs and self._modified_files:
+            await self._send_file_outputs()
+
+    async def _send_file_outputs(self) -> None:
+        max_size = self._config.max_attachment_size_mb * 1024 * 1024
+        files = []
+        for path in self._modified_files[:5]:
+            if os.path.exists(path) and os.path.getsize(path) <= max_size:
+                files.append(discord.File(path))
+        if files:
+            try:
+                await self._channel.send(files=files)
+            except discord.HTTPException as e:
+                logger.warning("Failed to send file outputs: %s", e)

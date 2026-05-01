@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 from dataclasses import dataclass, field
 from typing import Awaitable, Callable, Optional
@@ -8,11 +9,9 @@ from typing import Awaitable, Callable, Optional
 from claude_agent_sdk import (
     ClaudeAgentOptions,
     ClaudeSDKClient,
-    ResultMessage,
     SDKSessionInfo,
-    StreamEvent,
-    SystemMessage,
     list_sessions,
+    rename_session,
 )
 
 from config import BotConfig
@@ -31,6 +30,11 @@ class ClaudeEvent:
     is_error: bool = False
     cost_usd: float = 0.0
     session_id: str = ""
+    task_id: str = ""
+    task_description: str = ""
+    task_status: str = ""
+    task_summary: str = ""
+    task_last_tool: str = ""
 
 
 @dataclass
@@ -44,8 +48,9 @@ class ClaudeResult:
 class ClaudeGateway:
     """Manages a persistent ClaudeSDKClient per channel."""
 
-    def __init__(self, config: BotConfig):
+    def __init__(self, config: BotConfig, effort_override: str = ""):
         self.config = config
+        self._effort_override = effort_override
         self._client: Optional[ClaudeSDKClient] = None
         self._connected = False
         self.session_id: Optional[str] = None
@@ -65,6 +70,28 @@ class ClaudeGateway:
             opts["allowed_tools"] = [t.strip() for t in self.config.claude_allowed_tools.split(",") if t.strip()]
         if self.config.claude_system_prompt:
             opts["system_prompt"] = self.config.claude_system_prompt
+
+        effort = self._effort_override or self.config.claude_effort
+        if effort:
+            opts["effort"] = effort
+        if self.config.claude_fallback_model:
+            opts["fallback_model"] = self.config.claude_fallback_model
+        if self.config.claude_add_dirs:
+            opts["add_dirs"] = self.config.claude_add_dirs
+        if self.config.claude_mcp_config:
+            cfg = self.config.claude_mcp_config.strip()
+            try:
+                if cfg.startswith("{"):
+                    opts["mcp_servers"] = json.loads(cfg)
+                else:
+                    opts["mcp_servers"] = cfg
+            except json.JSONDecodeError:
+                logger.warning("Invalid CLAUDE_MCP_CONFIG JSON, ignoring")
+        if self.config.claude_plugins:
+            opts["plugins"] = [{"type": "local", "path": p} for p in self.config.claude_plugins]
+        if self.config.claude_task_budget_tokens > 0:
+            opts["task_budget"] = {"total": self.config.claude_task_budget_tokens}
+
         return ClaudeAgentOptions(**opts)
 
     async def connect(self, initial_prompt: Optional[str] = None, resume_session_id: Optional[str] = None) -> None:
@@ -118,6 +145,29 @@ class ClaudeGateway:
     def _adapt(self, msg) -> Optional[ClaudeEvent]:
         """Convert SDK message types to ClaudeEvent for stream_consumer compatibility."""
         t = type(msg).__name__
+
+        if t == "TaskStartedMessage":
+            return ClaudeEvent(
+                type="task", subtype="started",
+                task_id=getattr(msg, "task_id", ""),
+                task_description=getattr(msg, "description", ""),
+            )
+
+        if t == "TaskProgressMessage":
+            return ClaudeEvent(
+                type="task", subtype="progress",
+                task_id=getattr(msg, "task_id", ""),
+                task_description=getattr(msg, "description", ""),
+                task_last_tool=getattr(msg, "last_tool_name", "") or "",
+            )
+
+        if t == "TaskNotificationMessage":
+            return ClaudeEvent(
+                type="task", subtype="notification",
+                task_id=getattr(msg, "task_id", ""),
+                task_status=getattr(msg, "status", ""),
+                task_summary=getattr(msg, "summary", "") or "",
+            )
 
         if t == "SystemMessage":
             return ClaudeEvent(type="system", subtype=getattr(msg, "subtype", ""))
@@ -175,6 +225,16 @@ class ClaudeGateway:
             )
 
         return None
+
+    async def set_model(self, model: str) -> None:
+        if self._client and self._connected:
+            await self._client.set_model(model)
+
+    async def rename_current_session(self, name: str) -> None:
+        if self.session_id:
+            await asyncio.to_thread(
+                rename_session, self.session_id, name, self.config.claude_working_dir
+            )
 
     async def interrupt(self) -> None:
         if self._client and self._connected:

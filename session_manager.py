@@ -21,6 +21,10 @@ class Session:
     message_count: int = 0
     total_cost_usd: float = 0.0
     running: bool = False
+    custom_name: str = ""
+    model_override: str = ""
+    effort_override: str = ""
+    message_queue: asyncio.Queue = field(default_factory=lambda: asyncio.Queue(maxsize=10))
 
 
 class SessionManager:
@@ -96,10 +100,14 @@ class SessionManager:
         return {
             "active": True,
             "connected": session.gateway.connected,
+            "name": session.custom_name or "(unnamed)",
+            "model": session.model_override or self._config.claude_model or "(default)",
+            "effort": session.effort_override or self._config.claude_effort or "(default)",
             "messages": session.message_count,
             "cost_usd": round(session.total_cost_usd, 4),
             "running": session.running,
             "idle_minutes": round((time.time() - session.last_activity) / 60, 1),
+            "queued": session.message_queue.qsize(),
         }
 
     async def resume(self, channel_id: str, session_id: str) -> None:
@@ -120,3 +128,6 @@ class SessionManager:
 
     def active_count(self) -> int:
         return sum(1 for s in self._sessions.values() if s.running)
+
+    def get_session(self, channel_id: str) -> Optional[Session]:
+        return self._sessions.get(channel_id)
