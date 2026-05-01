@@ -1,0 +1,303 @@
+Traceback (most recent call last):
+  File "/Users/momo/PycharmProjects/claude-discord-bot/bot.py", line 6, in <module>
+    from discord_adapter import ClaudeCodeBot
+  File "/Users/momo/PycharmProjects/claude-discord-bot/discord_adapter.py", line 9, in <module>
+    import discord
+ModuleNotFoundError: No module named 'discord'
+2026-05-01 17:09:49,411 [discord.client] WARNING: PyNaCl is not installed, voice will NOT be supported
+2026-05-01 17:09:49,411 [discord.client] WARNING: davey is not installed, voice will NOT be supported
+2026-05-01 17:09:53,702 [discord_adapter] INFO: Connected as 小克#5895 (id=1498983238700634214)
+2026-05-01 17:09:54,598 [discord_adapter] WARNING: Failed to register /update-config: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,598 [discord_adapter] WARNING: Failed to register /debug: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,598 [discord_adapter] WARNING: Failed to register /simplify: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,598 [discord_adapter] WARNING: Failed to register /batch: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /fewer-permission-prompts: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /loop: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /claude-api: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /superpowers-execute-plan: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /superpowers-write-plan: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /superpowers-brainstorm: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /superpowers-using-git-worktrees: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /superpowers-using-superpowers: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /superpowers-test-driven-developm: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /superpowers-writing-plans: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /superpowers-executing-plans: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /superpowers-finishing-a-developm: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /superpowers-subagent-driven-deve: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /superpowers-brainstorming: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,599 [discord_adapter] WARNING: Failed to register /superpowers-verification-before-: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /superpowers-systematic-debugging: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /superpowers-dispatching-parallel: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /superpowers-receiving-code-revie: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /superpowers-requesting-code-revi: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /superpowers-writing-skills: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /skill-creator-skill-creator: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /frontend-design-frontend-design: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /discord-configure: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /discord-access: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /compact: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /context: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /cost: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /heapdump: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /init: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /review: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /security-review: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /insights: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] WARNING: Failed to register /team-onboarding: parameter '_cmd' is missing a type annotation in callback 'ClaudeCodeBot._add_cc_command.<locals>.handler'
+2026-05-01 17:09:54,600 [discord_adapter] INFO: Registered 0 Claude Code slash commands
+2026-05-01 17:09:55,136 [discord_adapter] INFO: Synced 3 Discord slash command(s) total
+2026-05-01 17:10:49,816 [session_manager] INFO: Created session 02c37fab-2027-4499-9d06-c1bf3795ad37 for channel 1499692098369093674
+2026-05-01 17:10:51,029 [claude_runner] INFO: Running: claude -p --output-format stream-json --verbose --include-partial-messages --session-id 02c37fab-2027-4499-9d06-c1bf3795ad37 --permission-mode default 这个是运行日志 /Users/momo/PycharmProjects/claude-discord-bot/log/claude_bot.20260501，看下有什么问题 (cwd=/Users/momo/PycharmProjects/claude-discord-bot)
+2026-05-01 17:10:51,405 [claude_runner] INFO: Event: type=system subtype=hook_started result=
+2026-05-01 17:10:51,932 [claude_runner] INFO: Event: type=system subtype=hook_response result=
+2026-05-01 17:10:51,946 [claude_runner] INFO: Event: type=system subtype=init result=
+2026-05-01 17:10:51,946 [claude_runner] INFO: Event: type=system subtype=status result=
+2026-05-01 17:10:55,651 [claude_runner] INFO: Event: type=assistant subtype= result=
+2026-05-01 17:10:56,107 [claude_runner] INFO: Event: type=assistant subtype= result=
+2026-05-01 17:10:56,583 [claude_runner] INFO: Event: type=user subtype= result=
+2026-05-01 17:10:56,583 [claude_runner] INFO: Event: type=system subtype=status result=
+2026-05-01 17:11:04,608 [claude_runner] INFO: Event: type=assistant subtype= result=
+2026-05-01 17:11:05,003 [claude_runner] INFO: Event: type=assistant subtype= result=日志中有两个主要问题。我先看下相关代码来确认根因。
+2026-05-01 17:11:05,849 [claude_runner] INFO: Event: type=assistant subtype= result=
+2026-05-01 17:11:06,279 [claude_runner] INFO: Event: type=user subtype= result=
+2026-05-01 17:11:06,279 [claude_runner] INFO: Event: type=system subtype=status result=
+2026-05-01 17:11:08,581 [claude_runner] INFO: Event: type=assistant subtype= result=
+2026-05-01 17:11:09,009 [claude_runner] INFO: Event: type=user subtype= result=
+2026-05-01 17:11:09,010 [claude_runner] INFO: Event: type=system subtype=status result=
+2026-05-01 17:11:19,861 [claude_runner] INFO: Event: type=assistant subtype= result=
+2026-05-01 17:11:26,213 [claude_runner] INFO: Event: type=assistant subtype= result=日志中有两个问题：
+
+### 1. 主要问题：所有 Claude Code 斜杠命令注册失败（Registered 0）
+
+`discord_adapter.p
+2026-05-01 17:11:26,221 [claude_runner] INFO: Event: type=result subtype=result result=日志中有两个问题：
+
+### 1. 主要问题：所有 Claude Code 斜杠命令注册失败（Registered 0）
+
+`discord_adapter.p
+2026-05-01 17:11:26,667 [stream_consumer] INFO: Finalize: full_text=601, event.result=576, accumulated=601 -> final=601 chars
+2026-05-01 17:11:27,123 [claude_runner] INFO: Process exited: code=0, result_text=True, stderr=
+2026-05-01 17:15:05,032 [discord.client] WARNING: PyNaCl is not installed, voice will NOT be supported
+2026-05-01 17:15:05,033 [discord.client] WARNING: davey is not installed, voice will NOT be supported
+2026-05-01 17:15:09,250 [discord_adapter] INFO: Connected as 小克#5895 (id=1498983238700634214)
+2026-05-01 17:15:10,147 [discord_adapter] INFO: Registered 37 Claude Code slash commands
+2026-05-01 17:15:10,812 [discord_adapter] INFO: Synced 40 Discord slash command(s) total
+2026-05-01 17:15:47,941 [session_manager] INFO: Created session d04a77e1-5602-4bb3-b323-9be2d13adc4b for channel 1499692098369093674
+2026-05-01 17:15:48,849 [claude_runner] INFO: Running: claude -p --output-format stream-json --verbose --include-partial-messages --session-id d04a77e1-5602-4bb3-b323-9be2d13adc4b --permission-mode default 我刚修复了一把，持续关注日志 (cwd=/Users/momo/PycharmProjects/claude-discord-bot)
+2026-05-01 17:15:49,204 [claude_runner] INFO: Event: type=system subtype=hook_started result=
+2026-05-01 17:15:49,720 [claude_runner] INFO: Event: type=system subtype=hook_response result=
+2026-05-01 17:15:49,734 [claude_runner] INFO: Event: type=system subtype=init result=
+2026-05-01 17:15:49,735 [claude_runner] INFO: Event: type=system subtype=status result=
+2026-05-01 17:15:53,337 [claude_runner] INFO: Event: type=assistant subtype= result=
+2026-05-01 17:15:53,768 [claude_runner] INFO: Event: type=assistant subtype= result=好的，收到。有需要再找我。
+2026-05-01 17:15:53,793 [claude_runner] INFO: Event: type=result subtype=result result=好的，收到。有需要再找我。
+2026-05-01 17:15:53,793 [stream_consumer] INFO: Finalize: full_text=13, event.result=13, accumulated=13 -> final=13 chars
+2026-05-01 17:15:54,463 [claude_runner] INFO: Process exited: code=0, result_text=True, stderr=
+2026-05-01 17:17:39,137 [session_manager] INFO: Reset session for channel 1499692098369093674 -> 6fd0c4d1-38b3-4c02-a9d3-94d0ae08f680
+2026-05-01 17:19:30,669 [discord.client] WARNING: PyNaCl is not installed, voice will NOT be supported
+2026-05-01 17:19:30,669 [discord.client] WARNING: davey is not installed, voice will NOT be supported
+2026-05-01 17:19:34,839 [discord_adapter] INFO: Connected as 小克#5895 (id=1498983238700634214)
+2026-05-01 17:19:35,793 [discord_adapter] INFO: Registered 37 Claude Code slash commands
+2026-05-01 17:19:36,404 [discord_adapter] INFO: Synced 40 Discord slash command(s) total
+2026-05-01 17:19:43,564 [session_manager] INFO: Created session 2106fc8c-1ac0-4674-953a-9705d26e6a1c for channel 1499692098369093674
+2026-05-01 17:19:44,654 [claude_runner] INFO: Running: claude -p --output-format stream-json --verbose --include-partial-messages --session-id 2106fc8c-1ac0-4674-953a-9705d26e6a1c --permission-mode default 什么问题 (cwd=/Users/momo/PycharmProjects/claude-discord-bot)
+2026-05-01 17:19:45,034 [claude_runner] INFO: Event: type=system subtype=hook_started result=
+2026-05-01 17:19:45,586 [claude_runner] INFO: Event: type=system subtype=hook_response result=
+2026-05-01 17:19:45,601 [claude_runner] INFO: Event: type=system subtype=init result=
+2026-05-01 17:19:45,601 [claude_runner] INFO: Event: type=system subtype=status result=
+2026-05-01 17:19:49,970 [claude_runner] INFO: Event: type=assistant subtype= result=
+2026-05-01 17:19:51,651 [claude_runner] INFO: Event: type=assistant subtype= result=你好！你是想问我能帮你解决什么问题吗？
+
+目前我看到你在 `claude-discord-bot` 项目中，有一些未提交的更改（主要是日志文件和 IDE 配置文
+2026-05-01 17:19:51,667 [claude_runner] INFO: Event: type=result subtype=result result=你好！你是想问我能帮你解决什么问题吗？
+
+目前我看到你在 `claude-discord-bot` 项目中，有一些未提交的更改（主要是日志文件和 IDE 配置文
+2026-05-01 17:19:51,667 [stream_consumer] INFO: Finalize: full_text=104, event.result=104, accumulated=104 -> final=104 chars
+2026-05-01 17:19:52,323 [claude_runner] INFO: Process exited: code=0, result_text=True, stderr=
+2026-05-01 17:20:13,773 [claude_runner] INFO: Running: claude -p --output-format stream-json --verbose --include-partial-messages --resume 2106fc8c-1ac0-4674-953a-9705d26e6a1c --permission-mode default 你的输出一卡一卡的，可以丝滑一点吗 (cwd=/Users/momo/PycharmProjects/claude-discord-bot)
+2026-05-01 17:20:14,196 [claude_runner] INFO: Event: type=system subtype=init result=
+2026-05-01 17:20:14,196 [claude_runner] INFO: Event: type=system subtype=status result=
+2026-05-01 17:20:19,776 [claude_runner] INFO: Event: type=assistant subtype= result=
+2026-05-01 17:20:21,964 [claude_runner] INFO: Event: type=assistant subtype= result=输出速度是由模型和网络决定的，我这边可以切换到 **快速模式** 来加速输出：
+
+你可以在对话中输入 `/fast` 来开启快速输出模式。
+
+另外，如果网络到 
+2026-05-01 17:20:21,987 [claude_runner] INFO: Event: type=result subtype=result result=输出速度是由模型和网络决定的，我这边可以切换到 **快速模式** 来加速输出：
+
+你可以在对话中输入 `/fast` 来开启快速输出模式。
+
+另外，如果网络到 
+2026-05-01 17:20:21,987 [stream_consumer] INFO: Finalize: full_text=116, event.result=116, accumulated=116 -> final=116 chars
+2026-05-01 17:20:22,589 [claude_runner] INFO: Process exited: code=0, result_text=True, stderr=
+2026-05-01 17:22:11,707 [discord.client] WARNING: PyNaCl is not installed, voice will NOT be supported
+2026-05-01 17:22:11,707 [discord.client] WARNING: davey is not installed, voice will NOT be supported
+2026-05-01 17:22:16,006 [discord_adapter] INFO: Connected as 小克#5895 (id=1498983238700634214)
+2026-05-01 17:22:16,921 [discord_adapter] INFO: Registered 37 Claude Code slash commands
+2026-05-01 17:22:17,663 [discord_adapter] INFO: Synced 40 Discord slash command(s) total
+2026-05-01 17:22:22,252 [session_manager] INFO: Created session ae1d1951-3c0e-4a30-a54b-588351643cc2 for channel 1499692098369093674
+2026-05-01 17:22:23,359 [claude_runner] INFO: Running: claude -p --output-format stream-json --verbose --include-partial-messages --session-id ae1d1951-3c0e-4a30-a54b-588351643cc2 --permission-mode default 胡说不大 (cwd=/Users/momo/PycharmProjects/claude-discord-bot)
+2026-05-01 17:22:23,730 [claude_runner] INFO: Event: type=system subtype=hook_started result=
+2026-05-01 17:22:24,253 [claude_runner] INFO: Event: type=system subtype=hook_response result=
+2026-05-01 17:22:24,268 [claude_runner] INFO: Event: type=system subtype=init result=
+2026-05-01 17:22:24,268 [claude_runner] INFO: Event: type=system subtype=status result=
+2026-05-01 17:22:29,649 [claude_runner] INFO: Event: type=assistant subtype= result=
+2026-05-01 17:22:30,303 [claude_runner] INFO: Event: type=assistant subtype= result=哈哈，好的，那我尽量少胡说。有什么需要帮忙的吗？
+2026-05-01 17:22:30,342 [claude_runner] INFO: Event: type=result subtype=result result=哈哈，好的，那我尽量少胡说。有什么需要帮忙的吗？
+2026-05-01 17:22:30,343 [stream_consumer] INFO: Finalize: full_text=24, event.result=24, accumulated=24 -> final=24 chars
+2026-05-01 17:22:31,241 [claude_runner] INFO: Process exited: code=0, result_text=True, stderr=
+2026-05-01 17:22:44,353 [claude_runner] INFO: Running: claude -p --output-format stream-json --verbose --include-partial-messages --resume ae1d1951-3c0e-4a30-a54b-588351643cc2 --permission-mode default 需要你别胡说 (cwd=/Users/momo/PycharmProjects/claude-discord-bot)
+2026-05-01 17:22:44,757 [claude_runner] INFO: Event: type=system subtype=init result=
+2026-05-01 17:22:44,758 [claude_runner] INFO: Event: type=system subtype=status result=
+2026-05-01 17:22:47,498 [claude_runner] INFO: Event: type=assistant subtype= result=明白，说话靠谱，不瞎扯。有什么具体的事情需要我帮忙吗？
+2026-05-01 17:22:47,516 [claude_runner] INFO: Event: type=result subtype=result result=明白，说话靠谱，不瞎扯。有什么具体的事情需要我帮忙吗？
+2026-05-01 17:22:47,517 [stream_consumer] INFO: Finalize: full_text=27, event.result=27, accumulated=27 -> final=27 chars
+2026-05-01 17:22:48,033 [claude_runner] INFO: Process exited: code=0, result_text=True, stderr=
+2026-05-01 17:24:44,048 [claude_runner] INFO: Running: claude -p --output-format stream-json --verbose --include-partial-messages --resume ae1d1951-3c0e-4a30-a54b-588351643cc2 --permission-mode default /insights (cwd=/Users/momo/PycharmProjects/claude-discord-bot)
+2026-05-01 17:26:00,808 [claude_runner] INFO: Event: type=system subtype=init result=
+2026-05-01 17:26:00,808 [claude_runner] INFO: Event: type=system subtype=status result=
+2026-05-01 17:26:03,495 [claude_runner] INFO: Event: type=assistant subtype= result=Your shareable insights report is ready:
+file:///Users/momo/.claude/usage-data/r
+2026-05-01 17:26:03,496 [claude_runner] INFO: Event: type=result subtype=result result=Your shareable insights report is ready:
+file:///Users/momo/.claude/usage-data/r
+2026-05-01 17:26:03,496 [stream_consumer] INFO: Finalize: full_text=151, event.result=151, accumulated=151 -> final=151 chars
+2026-05-01 17:26:03,909 [claude_runner] INFO: Process exited: code=0, result_text=True, stderr=
+2026-05-01 17:31:49,102 [discord.client] WARNING: PyNaCl is not installed, voice will NOT be supported
+2026-05-01 17:31:49,102 [discord.client] WARNING: davey is not installed, voice will NOT be supported
+2026-05-01 17:31:53,457 [discord_adapter] INFO: Connected as 小克#5895 (id=1498983238700634214)
+2026-05-01 17:31:54,369 [discord_adapter] INFO: Registered 37 Claude Code slash commands
+2026-05-01 17:31:54,843 [discord_adapter] INFO: Synced 40 Discord slash command(s) total
+2026-05-01 17:31:59,732 [session_manager] INFO: Created session f5e16360-3d2a-4c0b-b3c1-1dcb1210dfd7 for channel 1499692098369093674
+2026-05-01 17:31:59,733 [claude_runner] INFO: Running: claude -p --output-format stream-json --verbose --include-partial-messages --session-id f5e16360-3d2a-4c0b-b3c1-1dcb1210dfd7 --permission-mode default /insights (cwd=/Users/momo/PycharmProjects/claude-discord-bot)
+2026-05-01 17:32:00,100 [claude_runner] INFO: Event: type=system subtype=hook_started result=
+2026-05-01 17:32:00,621 [claude_runner] INFO: Event: type=system subtype=hook_response result=
+2026-05-01 17:33:00,708 [claude_runner] INFO: Event: type=system subtype=init result=
+2026-05-01 17:33:00,708 [claude_runner] INFO: Event: type=system subtype=status result=
+2026-05-01 17:33:04,301 [claude_runner] INFO: Event: type=assistant subtype= result=
+
+Your shareable insights report is ready:
+file:///Users/momo/.claude/usage-data
+2026-05-01 17:33:04,301 [claude_runner] INFO: Event: type=result subtype=result result=
+
+Your shareable insights report is ready:
+file:///Users/momo/.claude/usage-data
+2026-05-01 17:33:04,301 [stream_consumer] INFO: Finalize: full_text=153, event.result=153, accumulated=153 -> final=153 chars
+2026-05-01 17:33:04,785 [claude_runner] INFO: Process exited: code=0, result_text=True, stderr=
+2026-05-01 17:33:19,673 [claude_runner] INFO: Running: claude -p --output-format stream-json --verbose --include-partial-messages --resume f5e16360-3d2a-4c0b-b3c1-1dcb1210dfd7 --permission-mode default /cost (cwd=/Users/momo/PycharmProjects/claude-discord-bot)
+2026-05-01 17:33:20,120 [claude_runner] INFO: Event: type=system subtype=init result=
+2026-05-01 17:33:20,120 [claude_runner] INFO: Event: type=assistant subtype= result=Total cost:            $0.0000
+Total duration (API):  0s
+Total duration (wall): 
+2026-05-01 17:33:20,120 [claude_runner] INFO: Event: type=result subtype=result result=Total cost:            $0.0000
+Total duration (API):  0s
+Total duration (wall): 
+2026-05-01 17:33:20,120 [stream_consumer] INFO: Finalize: full_text=0, event.result=206, accumulated=0 -> final=206 chars
+2026-05-01 17:33:20,543 [claude_runner] INFO: Process exited: code=0, result_text=True, stderr=
+2026-05-01 17:33:37,168 [claude_runner] INFO: Running: claude -p --output-format stream-json --verbose --include-partial-messages --resume f5e16360-3d2a-4c0b-b3c1-1dcb1210dfd7 --permission-mode default /cost (cwd=/Users/momo/PycharmProjects/claude-discord-bot)
+2026-05-01 17:33:37,590 [claude_runner] INFO: Event: type=system subtype=init result=
+2026-05-01 17:33:37,590 [claude_runner] INFO: Event: type=assistant subtype= result=Total cost:            $0.0000
+Total duration (API):  0s
+Total duration (wall): 
+2026-05-01 17:33:37,590 [claude_runner] INFO: Event: type=result subtype=result result=Total cost:            $0.0000
+Total duration (API):  0s
+Total duration (wall): 
+2026-05-01 17:33:37,590 [stream_consumer] INFO: Finalize: full_text=0, event.result=206, accumulated=0 -> final=206 chars
+2026-05-01 17:33:38,147 [claude_runner] INFO: Process exited: code=0, result_text=True, stderr=
+2026-05-01 17:33:48,033 [claude_runner] INFO: Running: claude -p --output-format stream-json --verbose --include-partial-messages --resume f5e16360-3d2a-4c0b-b3c1-1dcb1210dfd7 --permission-mode default /insights (cwd=/Users/momo/PycharmProjects/claude-discord-bot)
+2026-05-01 17:34:48,467 [claude_runner] INFO: Event: type=system subtype=init result=
+2026-05-01 17:34:48,467 [claude_runner] INFO: Event: type=system subtype=status result=
+2026-05-01 17:34:51,386 [claude_runner] INFO: Event: type=assistant subtype= result=Your shareable insights report is ready:
+file:///Users/momo/.claude/usage-data/r
+2026-05-01 17:34:51,386 [claude_runner] INFO: Event: type=result subtype=result result=Your shareable insights report is ready:
+file:///Users/momo/.claude/usage-data/r
+2026-05-01 17:34:51,386 [stream_consumer] INFO: Finalize: full_text=151, event.result=151, accumulated=151 -> final=151 chars
+2026-05-01 17:34:51,970 [claude_runner] INFO: Process exited: code=0, result_text=True, stderr=
+2026-05-01 17:35:11,633 [claude_runner] INFO: Running: claude -p --output-format stream-json --verbose --include-partial-messages --resume f5e16360-3d2a-4c0b-b3c1-1dcb1210dfd7 --permission-mode default /cost (cwd=/Users/momo/PycharmProjects/claude-discord-bot)
+2026-05-01 17:35:12,150 [claude_runner] INFO: Event: type=system subtype=init result=
+2026-05-01 17:35:12,150 [claude_runner] INFO: Event: type=assistant subtype= result=Total cost:            $0.0000
+Total duration (API):  0s
+Total duration (wall): 
+2026-05-01 17:35:12,150 [claude_runner] INFO: Event: type=result subtype=result result=Total cost:            $0.0000
+Total duration (API):  0s
+Total duration (wall): 
+2026-05-01 17:35:12,150 [stream_consumer] INFO: Finalize: full_text=0, event.result=206, accumulated=0 -> final=206 chars
+2026-05-01 17:35:12,602 [claude_runner] INFO: Process exited: code=0, result_text=True, stderr=
+2026-05-01 17:35:59,478 [claude_runner] INFO: Running: claude -p --output-format stream-json --verbose --include-partial-messages --resume f5e16360-3d2a-4c0b-b3c1-1dcb1210dfd7 --permission-mode default 你每句话最后的cost是这个session的成本吗 (cwd=/Users/momo/PycharmProjects/claude-discord-bot)
+2026-05-01 17:35:59,874 [claude_runner] INFO: Event: type=system subtype=init result=
+2026-05-01 17:35:59,874 [claude_runner] INFO: Event: type=system subtype=status result=
+2026-05-01 17:36:05,008 [claude_runner] INFO: Event: type=assistant subtype= result=
+2026-05-01 17:36:05,906 [claude_runner] INFO: Event: type=assistant subtype= result=是的，`/cost` 命令显示的是当前这个 session 的累计 token 用量和估算成本，包括输入 token、输出 token 和缓存 token 的消
+2026-05-01 17:36:05,930 [claude_runner] INFO: Event: type=result subtype=result result=是的，`/cost` 命令显示的是当前这个 session 的累计 token 用量和估算成本，包括输入 token、输出 token 和缓存 token 的消
+2026-05-01 17:36:05,930 [stream_consumer] INFO: Finalize: full_text=109, event.result=109, accumulated=109 -> final=109 chars
+2026-05-01 17:36:06,488 [claude_runner] INFO: Process exited: code=0, result_text=True, stderr=
+2026-05-01 17:55:50,073 [discord.client] WARNING: PyNaCl is not installed, voice will NOT be supported
+2026-05-01 17:55:50,073 [discord.client] WARNING: davey is not installed, voice will NOT be supported
+2026-05-01 17:55:54,439 [discord_adapter] INFO: Connected as 小克#5895 (id=1498983238700634214)
+2026-05-01 17:55:55,541 [discord_adapter] INFO: Registered 37 Claude Code slash commands
+2026-05-01 17:55:56,504 [discord_adapter] INFO: Synced 40 Discord slash command(s) total
+2026-05-01 17:55:58,887 [session_manager] INFO: Created session for channel 1499692098369093674
+2026-05-01 17:55:58,893 [claude_agent_sdk._internal.transport.subprocess_cli] INFO: Using bundled Claude Code CLI: /Users/momo/PycharmProjects/claude-discord-bot/.venv/lib/python3.11/site-packages/claude_agent_sdk/_bundled/claude
+2026-05-01 17:56:00,552 [claude_runner] INFO: SDK client connected
+2026-05-01 17:56:00,567 [stream_consumer] INFO: Finalize: full_text=0, event.result=206, accumulated=0 -> final=206 chars
+2026-05-01 17:56:25,520 [stream_consumer] INFO: Finalize: full_text=0, event.result=142, accumulated=0 -> final=142 chars
+2026-05-01 17:57:05,940 [stream_consumer] INFO: Finalize: full_text=0, event.result=356, accumulated=0 -> final=356 chars
+2026-05-01 17:57:27,066 [stream_consumer] INFO: Finalize: full_text=0, event.result=115, accumulated=0 -> final=115 chars
+2026-05-01 17:57:54,804 [stream_consumer] INFO: Finalize: full_text=0, event.result=267, accumulated=0 -> final=267 chars
+2026-05-01 17:58:15,412 [stream_consumer] INFO: Finalize: full_text=0, event.result=245, accumulated=0 -> final=245 chars
+2026-05-01 17:59:02,144 [stream_consumer] INFO: Finalize: full_text=0, event.result=221, accumulated=0 -> final=221 chars
+2026-05-01 17:59:31,515 [stream_consumer] INFO: Finalize: full_text=0, event.result=246, accumulated=0 -> final=246 chars
+2026-05-01 18:01:52,458 [discord.client] WARNING: PyNaCl is not installed, voice will NOT be supported
+2026-05-01 18:01:52,459 [discord.client] WARNING: davey is not installed, voice will NOT be supported
+2026-05-01 18:01:56,721 [discord_adapter] INFO: Connected as 小克#5895 (id=1498983238700634214)
+2026-05-01 18:01:57,650 [discord_adapter] INFO: Registered 37 Claude Code slash commands
+2026-05-01 18:01:58,296 [discord_adapter] INFO: Synced 40 Discord slash command(s) total
+2026-05-01 18:02:14,543 [session_manager] INFO: Created session for channel 1499692098369093674
+2026-05-01 18:02:15,827 [claude_agent_sdk._internal.transport.subprocess_cli] INFO: Using bundled Claude Code CLI: /Users/momo/PycharmProjects/claude-discord-bot/.venv/lib/python3.11/site-packages/claude_agent_sdk/_bundled/claude
+2026-05-01 18:02:17,743 [claude_runner] INFO: SDK client connected
+2026-05-01 18:02:55,492 [stream_consumer] INFO: Finalize: full_text=0, event.result=1182, accumulated=0 -> final=1182 chars
+2026-05-01 18:04:38,991 [stream_consumer] INFO: Finalize: full_text=0, event.result=2077, accumulated=0 -> final=2077 chars
+2026-05-01 18:09:20,934 [stream_consumer] INFO: Finalize: full_text=0, event.result=249, accumulated=0 -> final=249 chars
+2026-05-01 18:11:50,805 [stream_consumer] INFO: Finalize: full_text=0, event.result=1170, accumulated=0 -> final=1170 chars
+2026-05-01 18:12:58,149 [stream_consumer] INFO: Finalize: full_text=0, event.result=249, accumulated=0 -> final=249 chars
+2026-05-01 19:01:39,353 [discord_adapter] INFO: Connected as 小克#5895 (id=1498983238700634214)
+2026-05-01 19:01:40,433 [discord_adapter] WARNING: Failed to register /update-config: Command 'update-config' already registered.
+2026-05-01 19:01:40,434 [discord_adapter] WARNING: Failed to register /debug: Command 'debug' already registered.
+2026-05-01 19:01:40,434 [discord_adapter] WARNING: Failed to register /simplify: Command 'simplify' already registered.
+2026-05-01 19:01:40,434 [discord_adapter] WARNING: Failed to register /batch: Command 'batch' already registered.
+2026-05-01 19:01:40,434 [discord_adapter] WARNING: Failed to register /fewer-permission-prompts: Command 'fewer-permission-prompts' already registered.
+2026-05-01 19:01:40,434 [discord_adapter] WARNING: Failed to register /loop: Command 'loop' already registered.
+2026-05-01 19:01:40,434 [discord_adapter] WARNING: Failed to register /claude-api: Command 'claude-api' already registered.
+2026-05-01 19:01:40,434 [discord_adapter] WARNING: Failed to register /superpowers-execute-plan: Command 'superpowers-execute-plan' already registered.
+2026-05-01 19:01:40,434 [discord_adapter] WARNING: Failed to register /superpowers-brainstorm: Command 'superpowers-brainstorm' already registered.
+2026-05-01 19:01:40,434 [discord_adapter] WARNING: Failed to register /superpowers-write-plan: Command 'superpowers-write-plan' already registered.
+2026-05-01 19:01:40,434 [discord_adapter] WARNING: Failed to register /superpowers-brainstorming: Command 'superpowers-brainstorming' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /superpowers-using-superpowers: Command 'superpowers-using-superpowers' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /superpowers-test-driven-developm: Command 'superpowers-test-driven-developm' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /superpowers-using-git-worktrees: Command 'superpowers-using-git-worktrees' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /superpowers-writing-skills: Command 'superpowers-writing-skills' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /superpowers-finishing-a-developm: Command 'superpowers-finishing-a-developm' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /superpowers-requesting-code-revi: Command 'superpowers-requesting-code-revi' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /superpowers-subagent-driven-deve: Command 'superpowers-subagent-driven-deve' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /superpowers-dispatching-parallel: Command 'superpowers-dispatching-parallel' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /superpowers-receiving-code-revie: Command 'superpowers-receiving-code-revie' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /superpowers-verification-before-: Command 'superpowers-verification-before-' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /superpowers-systematic-debugging: Command 'superpowers-systematic-debugging' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /superpowers-executing-plans: Command 'superpowers-executing-plans' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /superpowers-writing-plans: Command 'superpowers-writing-plans' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /skill-creator-skill-creator: Command 'skill-creator-skill-creator' already registered.
+2026-05-01 19:01:40,435 [discord_adapter] WARNING: Failed to register /frontend-design-frontend-design: Command 'frontend-design-frontend-design' already registered.
+2026-05-01 19:01:40,436 [discord_adapter] WARNING: Failed to register /discord-configure: Command 'discord-configure' already registered.
+2026-05-01 19:01:40,436 [discord_adapter] WARNING: Failed to register /discord-access: Command 'discord-access' already registered.
+2026-05-01 19:01:40,436 [discord_adapter] WARNING: Failed to register /compact: Command 'compact' already registered.
+2026-05-01 19:01:40,436 [discord_adapter] WARNING: Failed to register /context: Command 'context' already registered.
+2026-05-01 19:01:40,436 [discord_adapter] WARNING: Failed to register /cost: Command 'cost' already registered.
+2026-05-01 19:01:40,436 [discord_adapter] WARNING: Failed to register /heapdump: Command 'heapdump' already registered.
+2026-05-01 19:01:40,436 [discord_adapter] WARNING: Failed to register /init: Command 'init' already registered.
+2026-05-01 19:01:40,436 [discord_adapter] WARNING: Failed to register /review: Command 'review' already registered.
+2026-05-01 19:01:40,436 [discord_adapter] WARNING: Failed to register /security-review: Command 'security-review' already registered.
+2026-05-01 19:01:40,436 [discord_adapter] WARNING: Failed to register /insights: Command 'insights' already registered.
+2026-05-01 19:01:40,436 [discord_adapter] WARNING: Failed to register /team-onboarding: Command 'team-onboarding' already registered.
+2026-05-01 19:01:40,436 [discord_adapter] INFO: Registered 0 Claude Code slash commands
+2026-05-01 19:01:41,281 [discord_adapter] INFO: Synced 40 Discord slash command(s) total
+2026-05-01 19:03:10,633 [stream_consumer] INFO: Finalize: full_text=0, event.result=151, accumulated=0 -> final=151 chars
+2026-05-01 19:03:45,104 [stream_consumer] INFO: Finalize: full_text=0, event.result=255, accumulated=0 -> final=255 chars
