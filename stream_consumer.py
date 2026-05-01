@@ -19,6 +19,7 @@ from message_formatter import (
 logger = logging.getLogger(__name__)
 
 MAX_FLOOD_STRIKES = 3
+PROGRESS_LIMIT = 1800
 
 
 class DiscordStreamConsumer:
@@ -40,8 +41,12 @@ class DiscordStreamConsumer:
         self._last_edit_time = 0.0
         self._flood_strikes = 0
         self._edit_disabled = False
-        self._tool_status_msg: Optional[discord.Message] = None
         self._finalized = False
+        # Progress log: accumulates tool calls and intermediate text
+        self._progress_lines: list[str] = []
+        self._progress_msg: Optional[discord.Message] = None
+        self._last_progress_edit_time = 0.0
+        self._in_tool_phase = False
         # Thinking
         self._thinking_accumulated = ""
         self._thinking_message: Optional[discord.Message] = None
@@ -58,7 +63,11 @@ class DiscordStreamConsumer:
         if event.text_delta:
             text = strip_ansi(event.text_delta)
             if text:
-                self._accumulated += text
+                if self._in_tool_phase:
+                    self._accumulated = text
+                    self._in_tool_phase = False
+                else:
+                    self._accumulated += text
                 self._full_text += text
                 await self._maybe_edit()
 
@@ -68,8 +77,29 @@ class DiscordStreamConsumer:
                 self._thinking_accumulated += text
                 await self._show_thinking()
 
-        elif event.tool_use and event.tool_use.get("name"):
-            await self._show_tool_status(event.tool_use)
+        elif event.tool_use and event.tool_use.get("name") and event.type != "tool_use_complete":
+            # content_block_start: just mark tool phase, don't display yet
+            if self._accumulated.strip() and self._current_message:
+                short = self._accumulated.strip()
+                if len(short) > 100:
+                    short = short[:97] + "..."
+                self._progress_lines.append(f"💬 {short}")
+                try:
+                    await self._current_message.delete()
+                except discord.HTTPException:
+                    pass
+                self._current_message = None
+                self._messages = [m for m in self._messages if m != self._current_message]
+                self._accumulated = ""
+            self._in_tool_phase = True
+
+        elif event.type == "tool_use_complete" and event.tool_use:
+            # Full input available — display once with parameters
+            status = format_tool_status(event.tool_use.get("name", ""), event.tool_use.get("input"))
+            self._progress_lines.append(status)
+            self._in_tool_phase = True
+            await self._update_progress()
+
             if self._config.send_file_outputs:
                 name = event.tool_use.get("name", "")
                 inp = event.tool_use.get("input", {})
@@ -147,15 +177,25 @@ class DiscordStreamConsumer:
                 await self._send_new_message(chunk + self._config.cursor)
             self._accumulated = chunks[-1] if len(chunks) > 1 else ""
 
-    async def _show_tool_status(self, tool_use: dict) -> None:
-        status_text = format_tool_status(tool_use.get("name", ""), tool_use.get("input"))
+    async def _update_progress(self) -> None:
+        now = time.monotonic()
+        if now - self._last_progress_edit_time < self._config.edit_interval:
+            return
+        text = "\n".join(self._progress_lines)
+        if len(text) > PROGRESS_LIMIT:
+            # Keep header + last N lines that fit
+            lines = self._progress_lines
+            while len("\n".join(lines)) > PROGRESS_LIMIT and len(lines) > 3:
+                lines = lines[1:]
+            text = "...\n" + "\n".join(lines)
         try:
-            if self._tool_status_msg:
-                await self._tool_status_msg.edit(content=status_text)
+            if self._progress_msg:
+                await self._progress_msg.edit(content=text[:SAFE_LIMIT])
             else:
-                self._tool_status_msg = await self._channel.send(status_text)
+                self._progress_msg = await self._channel.send(text[:SAFE_LIMIT])
         except discord.HTTPException:
             pass
+        self._last_progress_edit_time = now
 
     async def _show_thinking(self) -> None:
         now = time.monotonic()
@@ -176,32 +216,38 @@ class DiscordStreamConsumer:
 
     async def _show_task_progress(self, event: ClaudeEvent) -> None:
         if event.subtype == "started":
-            text = f"⚙️ **Task started:** {event.task_description}"
+            self._progress_lines.append(f"⚙️ **Task started:** {event.task_description}")
         elif event.subtype == "progress":
             tool_info = f" (using {event.task_last_tool})" if event.task_last_tool else ""
-            text = f"⚙️ **Task in progress:** {event.task_description}{tool_info}"
+            self._progress_lines.append(f"⚙️ **Task:** {event.task_description}{tool_info}")
         elif event.subtype == "notification":
             emoji = {"completed": "✅", "failed": "❌", "stopped": "⛔"}.get(event.task_status, "❓")
-            text = f"{emoji} **Task {event.task_status}:** {event.task_summary or event.task_description}"
+            self._progress_lines.append(f"{emoji} **Task {event.task_status}:** {event.task_summary or event.task_description}")
         else:
             return
-        try:
-            if self._task_status_msg:
-                await self._task_status_msg.edit(content=text[:SAFE_LIMIT])
-            else:
-                self._task_status_msg = await self._channel.send(text[:SAFE_LIMIT])
-        except discord.HTTPException:
-            pass
+        await self._update_progress()
 
     async def _finalize(self, event: ClaudeEvent) -> None:
         self._finalized = True
 
-        for msg in [self._tool_status_msg, self._task_status_msg]:
-            if msg:
-                try:
-                    await msg.delete()
-                except discord.HTTPException:
-                    pass
+        # Keep progress log visible (don't delete)
+        if self._progress_msg and self._progress_lines:
+            text = "\n".join(self._progress_lines)
+            if len(text) > PROGRESS_LIMIT:
+                lines = self._progress_lines
+                while len("\n".join(lines)) > PROGRESS_LIMIT and len(lines) > 3:
+                    lines = lines[1:]
+                text = "...\n" + "\n".join(lines)
+            try:
+                await self._progress_msg.edit(content=text[:SAFE_LIMIT])
+            except discord.HTTPException:
+                pass
+
+        if self._task_status_msg:
+            try:
+                await self._task_status_msg.delete()
+            except discord.HTTPException:
+                pass
 
         if self._thinking_message and self._thinking_accumulated:
             thinking = self._thinking_accumulated

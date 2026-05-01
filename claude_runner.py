@@ -54,11 +54,16 @@ class ClaudeGateway:
         self._client: Optional[ClaudeSDKClient] = None
         self._connected = False
         self.session_id: Optional[str] = None
+        # Track pending tool_use input across streaming events
+        self._pending_tool_name: str = ""
+        self._pending_tool_id: str = ""
+        self._pending_input_json: str = ""
 
     def _build_options(self) -> ClaudeAgentOptions:
         opts: dict = {
             "cwd": self.config.claude_working_dir or ".",
             "include_partial_messages": True,
+            "cli_path": self.config.claude_binary,
         }
         if self.config.claude_model:
             opts["model"] = self.config.claude_model
@@ -142,71 +147,105 @@ class ClaudeGateway:
 
         return result
 
+    @staticmethod
+    def _get(obj, key, default=None):
+        """Get a value from a dict or object attribute."""
+        if isinstance(obj, dict):
+            return obj.get(key, default)
+        return getattr(obj, key, default)
+
     def _adapt(self, msg) -> Optional[ClaudeEvent]:
         """Convert SDK message types to ClaudeEvent for stream_consumer compatibility."""
+        g = self._get
         t = type(msg).__name__
 
         if t == "TaskStartedMessage":
             return ClaudeEvent(
                 type="task", subtype="started",
-                task_id=getattr(msg, "task_id", ""),
-                task_description=getattr(msg, "description", ""),
+                task_id=g(msg, "task_id", ""),
+                task_description=g(msg, "description", ""),
             )
 
         if t == "TaskProgressMessage":
             return ClaudeEvent(
                 type="task", subtype="progress",
-                task_id=getattr(msg, "task_id", ""),
-                task_description=getattr(msg, "description", ""),
-                task_last_tool=getattr(msg, "last_tool_name", "") or "",
+                task_id=g(msg, "task_id", ""),
+                task_description=g(msg, "description", ""),
+                task_last_tool=g(msg, "last_tool_name", "") or "",
             )
 
         if t == "TaskNotificationMessage":
             return ClaudeEvent(
                 type="task", subtype="notification",
-                task_id=getattr(msg, "task_id", ""),
-                task_status=getattr(msg, "status", ""),
-                task_summary=getattr(msg, "summary", "") or "",
+                task_id=g(msg, "task_id", ""),
+                task_status=g(msg, "status", ""),
+                task_summary=g(msg, "summary", "") or "",
             )
 
         if t == "SystemMessage":
-            return ClaudeEvent(type="system", subtype=getattr(msg, "subtype", ""))
+            return ClaudeEvent(type="system", subtype=g(msg, "subtype", ""))
 
         if t == "StreamEvent":
             evt = msg.event
-            evt_type = getattr(evt, "type", "")
+            evt_type = g(evt, "type", "")
 
             if evt_type == "content_block_delta":
-                delta = getattr(evt, "delta", None)
+                delta = g(evt, "delta")
                 if delta:
-                    delta_type = getattr(delta, "type", "")
+                    delta_type = g(delta, "type", "")
                     if delta_type == "text_delta":
-                        return ClaudeEvent(type="stream_event", text_delta=getattr(delta, "text", ""))
+                        return ClaudeEvent(type="stream_event", text_delta=g(delta, "text", ""))
                     elif delta_type == "thinking_delta":
-                        return ClaudeEvent(type="stream_event", thinking_delta=getattr(delta, "thinking", ""))
+                        return ClaudeEvent(type="stream_event", thinking_delta=g(delta, "thinking", ""))
+                    elif delta_type == "input_json_delta":
+                        self._pending_input_json += g(delta, "partial_json", "")
 
             elif evt_type == "content_block_start":
-                block = getattr(evt, "content_block", None)
-                if block and getattr(block, "type", "") == "tool_use":
+                block = g(evt, "content_block")
+                if block and g(block, "type", "") == "tool_use":
+                    self._pending_tool_name = g(block, "name", "")
+                    self._pending_tool_id = g(block, "id", "")
+                    self._pending_input_json = ""
                     return ClaudeEvent(
                         type="stream_event",
-                        tool_use={"name": getattr(block, "name", ""), "id": getattr(block, "id", "")},
+                        tool_use={"name": self._pending_tool_name, "id": self._pending_tool_id},
                     )
+
+            elif evt_type == "content_block_stop":
+                if self._pending_tool_name:
+                    tool_input = {}
+                    if self._pending_input_json:
+                        try:
+                            tool_input = json.loads(self._pending_input_json)
+                        except json.JSONDecodeError:
+                            pass
+                    event = ClaudeEvent(
+                        type="tool_use_complete",
+                        tool_use={
+                            "name": self._pending_tool_name,
+                            "id": self._pending_tool_id,
+                            "input": tool_input,
+                        },
+                    )
+                    self._pending_tool_name = ""
+                    self._pending_tool_id = ""
+                    self._pending_input_json = ""
+                    return event
 
             return None
 
         if t == "AssistantMessage":
             texts = []
             tool = {}
-            for block in getattr(msg, "content", []) or []:
-                btype = getattr(block, "type", "")
+            for block in g(msg, "content", []) or []:
+                btype = g(block, "type", "")
                 if btype == "text":
-                    texts.append(getattr(block, "text", ""))
+                    texts.append(g(block, "text", ""))
                 elif btype == "tool_use":
                     tool = {
-                        "name": getattr(block, "name", ""),
-                        "id": getattr(block, "id", ""),
-                        "input": getattr(block, "input", {}),
+                        "name": g(block, "name", ""),
+                        "id": g(block, "id", ""),
+                        "input": g(block, "input", {}),
                     }
             return ClaudeEvent(
                 type="assistant",
@@ -218,10 +257,10 @@ class ClaudeGateway:
             return ClaudeEvent(
                 type="result",
                 subtype="result",
-                result=getattr(msg, "result", "") or "",
-                is_error=getattr(msg, "is_error", False),
-                cost_usd=getattr(msg, "total_cost_usd", 0.0) or 0.0,
-                session_id=getattr(msg, "session_id", "") or "",
+                result=g(msg, "result", "") or "",
+                is_error=g(msg, "is_error", False),
+                cost_usd=g(msg, "total_cost_usd", 0.0) or 0.0,
+                session_id=g(msg, "session_id", "") or "",
             )
 
         return None

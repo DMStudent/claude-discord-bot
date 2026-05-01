@@ -59,25 +59,75 @@ def truncate_message(text: str, limit: int = SAFE_LIMIT) -> list[str]:
 
 
 _TOOL_LABELS = {
-    "Bash": ("Running", "command"),
-    "Read": ("Reading", "file_path"),
-    "Write": ("Writing", "file_path"),
-    "Edit": ("Editing", "file_path"),
-    "Glob": ("Searching files", "pattern"),
-    "Grep": ("Searching for", "pattern"),
-    "Agent": ("Delegating to", "description"),
-    "WebSearch": ("Searching web", "query"),
-    "WebFetch": ("Fetching", "url"),
+    "Bash": ("💻", "command"),
+    "Read": ("📖", "file_path"),
+    "Write": ("📝", "file_path"),
+    "Edit": ("✏️", "file_path"),
+    "Glob": ("🔍", "pattern"),
+    "Grep": ("🔎", "pattern"),
+    "Agent": ("🤖", "description"),
+    "WebSearch": ("🌐", "query"),
+    "WebFetch": ("🌐", "url"),
+    "ToolSearch": ("🔧", "query"),
+    "TodoWrite": ("📋", "todos"),
+    "NotebookEdit": ("📓", "file_path"),
 }
+
+# Keys to try in order when extracting a detail from tool input
+_DETAIL_KEYS = ["query", "command", "file_path", "pattern", "url", "description",
+                "prompt", "message", "name", "path", "text", "args"]
+
+
+def _parse_mcp_tool_name(raw_name: str) -> tuple[str, str]:
+    """Parse MCP tool names like 'mcp__tavily__tavily_search' -> ('tavily', 'tavily_search')"""
+    if raw_name.startswith("mcp__"):
+        parts = raw_name.split("__", 2)
+        if len(parts) == 3:
+            return parts[1], parts[2]
+    return "", raw_name
+
+
+def _extract_detail(tool_input: dict | None, preferred_key: str = "") -> str:
+    if not tool_input or not isinstance(tool_input, dict):
+        return ""
+    if preferred_key and preferred_key in tool_input:
+        val = tool_input[preferred_key]
+        if isinstance(val, str):
+            return val
+    for key in _DETAIL_KEYS:
+        if key in tool_input:
+            val = tool_input[key]
+            if isinstance(val, str) and val.strip():
+                return val
+    # Last resort: first string value
+    for val in tool_input.values():
+        if isinstance(val, str) and val.strip():
+            return val
+    return ""
+
+
+def _truncate(text: str, limit: int = 100) -> str:
+    text = text.replace("\n", " ").strip()
+    if len(text) > limit:
+        return text[:limit - 3] + "..."
+    return text
 
 
 def format_tool_status(tool_name: str, tool_input: dict | None = None) -> str:
-    label, key = _TOOL_LABELS.get(tool_name, ("Using", ""))
-    detail = ""
-    if tool_input and key:
-        detail = tool_input.get(key, "")
+    # Handle MCP tools
+    mcp_server, clean_name = _parse_mcp_tool_name(tool_name)
+
+    if mcp_server:
+        emoji = "🔌"
+        detail = _extract_detail(tool_input)
+        if detail:
+            return f"{emoji} **{mcp_server}/{clean_name}**: `{_truncate(detail)}`"
+        return f"{emoji} **{mcp_server}/{clean_name}**"
+
+    # Built-in tools
+    emoji, preferred_key = _TOOL_LABELS.get(clean_name, ("⚡", ""))
+    detail = _extract_detail(tool_input, preferred_key)
+
     if detail:
-        if len(detail) > 80:
-            detail = detail[:77] + "..."
-        return f"*{label}:* `{detail}`"
-    return f"*{label} {tool_name}*"
+        return f"{emoji} **{clean_name}**: `{_truncate(detail)}`"
+    return f"{emoji} **{clean_name}**"
