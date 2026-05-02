@@ -1,0 +1,138 @@
+2026-05-02 10:01:35,306 [discord.client] WARNING: PyNaCl is not installed, voice will NOT be supported
+2026-05-02 10:01:35,307 [discord.client] WARNING: davey is not installed, voice will NOT be supported
+2026-05-02 10:01:39,652 [discord_adapter] INFO: Connected as 小克#5895 (id=1498983238700634214)
+2026-05-02 10:01:42,419 [discord_adapter] INFO: Registered 39 Claude Code slash commands
+2026-05-02 10:01:43,014 [discord_adapter] INFO: Synced 47 Discord slash command(s) total
+2026-05-02 10:02:03,535 [claude_runner] INFO: SDK client connected (resume=d641c515-e76b-4e47-aa9b-779daea9857f)
+2026-05-02 10:02:03,535 [session_manager] INFO: Resumed session d641c515 for channel 1499692098369093674
+2026-05-02 10:02:12,697 [discord_adapter] INFO: Processing message for channel 1499692098369093674 (msg #1)
+2026-05-02 10:02:13,070 [claude_runner] INFO: Query (existing connection): 2 chars
+2026-05-02 10:02:25,028 [stream_consumer] INFO: Finalize: full_text=151, event.result=151, accumulated=151 -> final=151 chars
+2026-05-02 10:02:25,514 [claude_runner] INFO: Receive complete: 155 SDK messages, result=151 chars
+2026-05-02 11:05:53,493 [discord_adapter] INFO: Connected as 小克#5895 (id=1498983238700634214)
+2026-05-02 11:05:59,045 [discord_adapter] WARNING: Failed to register /update-config: Command 'update-config' already registered.
+2026-05-02 11:05:59,045 [discord_adapter] WARNING: Failed to register /debug: Command 'debug' already registered.
+2026-05-02 11:05:59,045 [discord_adapter] WARNING: Failed to register /simplify: Command 'simplify' already registered.
+2026-05-02 11:05:59,045 [discord_adapter] WARNING: Failed to register /batch: Command 'batch' already registered.
+2026-05-02 11:05:59,045 [discord_adapter] WARNING: Failed to register /fewer-permission-prompts: Command 'fewer-permission-prompts' already registered.
+2026-05-02 11:05:59,045 [discord_adapter] WARNING: Failed to register /loop: Command 'loop' already registered.
+2026-05-02 11:05:59,046 [discord_adapter] WARNING: Failed to register /claude-api: Command 'claude-api' already registered.
+2026-05-02 11:05:59,046 [discord_adapter] WARNING: Failed to register /chinese-naming: Command 'chinese-naming' already registered.
+2026-05-02 11:05:59,046 [discord_adapter] WARNING: Failed to register /superpowers-execute-plan: Command 'superpowers-execute-plan' already registered.
+2026-05-02 11:05:59,046 [discord_adapter] WARNING: Failed to register /superpowers-brainstorm: Command 'superpowers-brainstorm' already registered.
+2026-05-02 11:05:59,046 [discord_adapter] WARNING: Failed to register /superpowers-write-plan: Command 'superpowers-write-plan' already registered.
+2026-05-02 11:05:59,046 [discord_adapter] WARNING: Failed to register /superpowers-brainstorming: Command 'superpowers-brainstorming' already registered.
+2026-05-02 11:05:59,046 [discord_adapter] WARNING: Failed to register /superpowers-receiving-code-revie: Command 'superpowers-receiving-code-revie' already registered.
+2026-05-02 11:05:59,046 [discord_adapter] WARNING: Failed to register /superpowers-test-driven-developm: Command 'superpowers-test-driven-developm' already registered.
+2026-05-02 11:05:59,046 [discord_adapter] WARNING: Failed to register /superpowers-using-git-worktrees: Command 'superpowers-using-git-worktrees' already registered.
+2026-05-02 11:05:59,046 [discord_adapter] WARNING: Failed to register /superpowers-requesting-code-revi: Command 'superpowers-requesting-code-revi' already registered.
+2026-05-02 11:05:59,046 [discord_adapter] WARNING: Failed to register /superpowers-using-superpowers: Command 'superpowers-using-superpowers' already registered.
+2026-05-02 11:05:59,047 [discord_adapter] WARNING: Failed to register /superpowers-writing-skills: Command 'superpowers-writing-skills' already registered.
+2026-05-02 11:05:59,047 [discord_adapter] WARNING: Failed to register /superpowers-dispatching-parallel: Command 'superpowers-dispatching-parallel' already registered.
+2026-05-02 11:05:59,047 [discord_adapter] WARNING: Failed to register /superpowers-systematic-debugging: Command 'superpowers-systematic-debugging' already registered.
+2026-05-02 11:05:59,047 [discord_adapter] WARNING: Failed to register /superpowers-subagent-driven-deve: Command 'superpowers-subagent-driven-deve' already registered.
+2026-05-02 11:05:59,047 [discord_adapter] WARNING: Failed to register /superpowers-writing-plans: Command 'superpowers-writing-plans' already registered.
+2026-05-02 11:05:59,047 [discord_adapter] WARNING: Failed to register /superpowers-finishing-a-developm: Command 'superpowers-finishing-a-developm' already registered.
+2026-05-02 11:05:59,047 [discord_adapter] WARNING: Failed to register /superpowers-executing-plans: Command 'superpowers-executing-plans' already registered.
+2026-05-02 11:05:59,047 [discord_adapter] WARNING: Failed to register /superpowers-verification-before-: Command 'superpowers-verification-before-' already registered.
+2026-05-02 11:05:59,048 [discord_adapter] WARNING: Failed to register /skill-creator-skill-creator: Command 'skill-creator-skill-creator' already registered.
+2026-05-02 11:05:59,048 [discord_adapter] WARNING: Failed to register /frontend-design-frontend-design: Command 'frontend-design-frontend-design' already registered.
+2026-05-02 11:05:59,048 [discord_adapter] WARNING: Failed to register /discord-access: Command 'discord-access' already registered.
+2026-05-02 11:05:59,048 [discord_adapter] WARNING: Failed to register /discord-configure: Command 'discord-configure' already registered.
+2026-05-02 11:05:59,048 [discord_adapter] WARNING: Failed to register /clear: Command 'clear' already registered.
+2026-05-02 11:05:59,048 [discord_adapter] WARNING: Failed to register /compact: Command 'compact' already registered.
+2026-05-02 11:05:59,048 [discord_adapter] WARNING: Failed to register /context: Command 'context' already registered.
+2026-05-02 11:05:59,048 [discord_adapter] WARNING: Failed to register /heapdump: Command 'heapdump' already registered.
+2026-05-02 11:05:59,048 [discord_adapter] WARNING: Failed to register /init: Command 'init' already registered.
+2026-05-02 11:05:59,048 [discord_adapter] WARNING: Failed to register /review: Command 'review' already registered.
+2026-05-02 11:05:59,048 [discord_adapter] WARNING: Failed to register /security-review: Command 'security-review' already registered.
+2026-05-02 11:05:59,048 [discord_adapter] WARNING: Failed to register /usage: Command 'usage' already registered.
+2026-05-02 11:05:59,049 [discord_adapter] WARNING: Failed to register /insights: Command 'insights' already registered.
+2026-05-02 11:05:59,049 [discord_adapter] WARNING: Failed to register /team-onboarding: Command 'team-onboarding' already registered.
+2026-05-02 11:05:59,049 [discord_adapter] INFO: Registered 0 Claude Code slash commands
+2026-05-02 11:06:00,316 [discord_adapter] INFO: Synced 47 Discord slash command(s) total
+2026-05-02 11:06:12,005 [claude_runner] INFO: SDK client disconnected
+2026-05-02 11:06:12,005 [session_manager] INFO: Cleaned up 1 expired session(s)
+2026-05-02 12:21:24,374 [discord_adapter] INFO: Connected as 小克#5895 (id=1498983238700634214)
+2026-05-02 12:21:28,210 [discord_adapter] WARNING: Failed to register /update-config: Command 'update-config' already registered.
+2026-05-02 12:21:28,210 [discord_adapter] WARNING: Failed to register /debug: Command 'debug' already registered.
+2026-05-02 12:21:28,210 [discord_adapter] WARNING: Failed to register /simplify: Command 'simplify' already registered.
+2026-05-02 12:21:28,210 [discord_adapter] WARNING: Failed to register /batch: Command 'batch' already registered.
+2026-05-02 12:21:28,211 [discord_adapter] WARNING: Failed to register /fewer-permission-prompts: Command 'fewer-permission-prompts' already registered.
+2026-05-02 12:21:28,211 [discord_adapter] WARNING: Failed to register /loop: Command 'loop' already registered.
+2026-05-02 12:21:28,211 [discord_adapter] WARNING: Failed to register /claude-api: Command 'claude-api' already registered.
+2026-05-02 12:21:28,211 [discord_adapter] WARNING: Failed to register /chinese-naming: Command 'chinese-naming' already registered.
+2026-05-02 12:21:28,211 [discord_adapter] WARNING: Failed to register /superpowers-execute-plan: Command 'superpowers-execute-plan' already registered.
+2026-05-02 12:21:28,211 [discord_adapter] WARNING: Failed to register /superpowers-brainstorm: Command 'superpowers-brainstorm' already registered.
+2026-05-02 12:21:28,211 [discord_adapter] WARNING: Failed to register /superpowers-write-plan: Command 'superpowers-write-plan' already registered.
+2026-05-02 12:21:28,211 [discord_adapter] WARNING: Failed to register /superpowers-using-git-worktrees: Command 'superpowers-using-git-worktrees' already registered.
+2026-05-02 12:21:28,211 [discord_adapter] WARNING: Failed to register /superpowers-test-driven-developm: Command 'superpowers-test-driven-developm' already registered.
+2026-05-02 12:21:28,211 [discord_adapter] WARNING: Failed to register /superpowers-systematic-debugging: Command 'superpowers-systematic-debugging' already registered.
+2026-05-02 12:21:28,211 [discord_adapter] WARNING: Failed to register /superpowers-writing-plans: Command 'superpowers-writing-plans' already registered.
+2026-05-02 12:21:28,211 [discord_adapter] WARNING: Failed to register /superpowers-brainstorming: Command 'superpowers-brainstorming' already registered.
+2026-05-02 12:21:28,212 [discord_adapter] WARNING: Failed to register /superpowers-dispatching-parallel: Command 'superpowers-dispatching-parallel' already registered.
+2026-05-02 12:21:28,212 [discord_adapter] WARNING: Failed to register /superpowers-using-superpowers: Command 'superpowers-using-superpowers' already registered.
+2026-05-02 12:21:28,212 [discord_adapter] WARNING: Failed to register /superpowers-executing-plans: Command 'superpowers-executing-plans' already registered.
+2026-05-02 12:21:28,212 [discord_adapter] WARNING: Failed to register /superpowers-verification-before-: Command 'superpowers-verification-before-' already registered.
+2026-05-02 12:21:28,212 [discord_adapter] WARNING: Failed to register /superpowers-receiving-code-revie: Command 'superpowers-receiving-code-revie' already registered.
+2026-05-02 12:21:28,212 [discord_adapter] WARNING: Failed to register /superpowers-finishing-a-developm: Command 'superpowers-finishing-a-developm' already registered.
+2026-05-02 12:21:28,212 [discord_adapter] WARNING: Failed to register /superpowers-writing-skills: Command 'superpowers-writing-skills' already registered.
+2026-05-02 12:21:28,212 [discord_adapter] WARNING: Failed to register /superpowers-requesting-code-revi: Command 'superpowers-requesting-code-revi' already registered.
+2026-05-02 12:21:28,212 [discord_adapter] WARNING: Failed to register /superpowers-subagent-driven-deve: Command 'superpowers-subagent-driven-deve' already registered.
+2026-05-02 12:21:28,213 [discord_adapter] WARNING: Failed to register /skill-creator-skill-creator: Command 'skill-creator-skill-creator' already registered.
+2026-05-02 12:21:28,213 [discord_adapter] WARNING: Failed to register /frontend-design-frontend-design: Command 'frontend-design-frontend-design' already registered.
+2026-05-02 12:21:28,213 [discord_adapter] WARNING: Failed to register /discord-access: Command 'discord-access' already registered.
+2026-05-02 12:21:28,213 [discord_adapter] WARNING: Failed to register /discord-configure: Command 'discord-configure' already registered.
+2026-05-02 12:21:28,213 [discord_adapter] WARNING: Failed to register /clear: Command 'clear' already registered.
+2026-05-02 12:21:28,213 [discord_adapter] WARNING: Failed to register /compact: Command 'compact' already registered.
+2026-05-02 12:21:28,213 [discord_adapter] WARNING: Failed to register /context: Command 'context' already registered.
+2026-05-02 12:21:28,213 [discord_adapter] WARNING: Failed to register /heapdump: Command 'heapdump' already registered.
+2026-05-02 12:21:28,214 [discord_adapter] WARNING: Failed to register /init: Command 'init' already registered.
+2026-05-02 12:21:28,214 [discord_adapter] WARNING: Failed to register /review: Command 'review' already registered.
+2026-05-02 12:21:28,214 [discord_adapter] WARNING: Failed to register /security-review: Command 'security-review' already registered.
+2026-05-02 12:21:28,214 [discord_adapter] WARNING: Failed to register /usage: Command 'usage' already registered.
+2026-05-02 12:21:28,214 [discord_adapter] WARNING: Failed to register /insights: Command 'insights' already registered.
+2026-05-02 12:21:28,214 [discord_adapter] WARNING: Failed to register /team-onboarding: Command 'team-onboarding' already registered.
+2026-05-02 12:21:28,214 [discord_adapter] INFO: Registered 0 Claude Code slash commands
+2026-05-02 12:21:29,372 [discord_adapter] INFO: Synced 47 Discord slash command(s) total
+2026-05-02 13:35:05,678 [discord_adapter] INFO: Connected as 小克#5895 (id=1498983238700634214)
+2026-05-02 13:35:08,294 [discord_adapter] WARNING: Failed to register /update-config: Command 'update-config' already registered.
+2026-05-02 13:35:08,294 [discord_adapter] WARNING: Failed to register /debug: Command 'debug' already registered.
+2026-05-02 13:35:08,294 [discord_adapter] WARNING: Failed to register /simplify: Command 'simplify' already registered.
+2026-05-02 13:35:08,294 [discord_adapter] WARNING: Failed to register /batch: Command 'batch' already registered.
+2026-05-02 13:35:08,294 [discord_adapter] WARNING: Failed to register /fewer-permission-prompts: Command 'fewer-permission-prompts' already registered.
+2026-05-02 13:35:08,294 [discord_adapter] WARNING: Failed to register /loop: Command 'loop' already registered.
+2026-05-02 13:35:08,294 [discord_adapter] WARNING: Failed to register /claude-api: Command 'claude-api' already registered.
+2026-05-02 13:35:08,294 [discord_adapter] WARNING: Failed to register /superpowers-execute-plan: Command 'superpowers-execute-plan' already registered.
+2026-05-02 13:35:08,294 [discord_adapter] WARNING: Failed to register /superpowers-write-plan: Command 'superpowers-write-plan' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-brainstorm: Command 'superpowers-brainstorm' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-using-git-worktrees: Command 'superpowers-using-git-worktrees' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-brainstorming: Command 'superpowers-brainstorming' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-writing-skills: Command 'superpowers-writing-skills' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-using-superpowers: Command 'superpowers-using-superpowers' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-test-driven-developm: Command 'superpowers-test-driven-developm' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-systematic-debugging: Command 'superpowers-systematic-debugging' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-finishing-a-developm: Command 'superpowers-finishing-a-developm' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-dispatching-parallel: Command 'superpowers-dispatching-parallel' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-receiving-code-revie: Command 'superpowers-receiving-code-revie' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-executing-plans: Command 'superpowers-executing-plans' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-requesting-code-revi: Command 'superpowers-requesting-code-revi' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-writing-plans: Command 'superpowers-writing-plans' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-subagent-driven-deve: Command 'superpowers-subagent-driven-deve' already registered.
+2026-05-02 13:35:08,295 [discord_adapter] WARNING: Failed to register /superpowers-verification-before-: Command 'superpowers-verification-before-' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] WARNING: Failed to register /skill-creator-skill-creator: Command 'skill-creator-skill-creator' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] WARNING: Failed to register /frontend-design-frontend-design: Command 'frontend-design-frontend-design' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] WARNING: Failed to register /discord-configure: Command 'discord-configure' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] WARNING: Failed to register /discord-access: Command 'discord-access' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] WARNING: Failed to register /clear: Command 'clear' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] WARNING: Failed to register /compact: Command 'compact' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] WARNING: Failed to register /context: Command 'context' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] WARNING: Failed to register /heapdump: Command 'heapdump' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] WARNING: Failed to register /init: Command 'init' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] WARNING: Failed to register /review: Command 'review' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] WARNING: Failed to register /security-review: Command 'security-review' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] WARNING: Failed to register /usage: Command 'usage' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] WARNING: Failed to register /insights: Command 'insights' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] WARNING: Failed to register /team-onboarding: Command 'team-onboarding' already registered.
+2026-05-02 13:35:08,296 [discord_adapter] INFO: Registered 0 Claude Code slash commands
+2026-05-02 13:35:09,152 [discord_adapter] INFO: Synced 47 Discord slash command(s) total

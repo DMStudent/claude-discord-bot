@@ -213,11 +213,11 @@ class ClaudeCodeBot:
                     full_id = match[0].session_id
                 await interaction.response.defer()
                 await self.session_mgr.resume(str(interaction.channel_id), full_id)
-                await interaction.followup.send(f"Resumed session `{full_id[:8]}...`")
+                await interaction.edit_original_response(content=f"Resumed session `{full_id[:8]}...`")
             except Exception as e:
                 logger.exception("Failed to resume session")
                 if interaction.response.is_done():
-                    await interaction.followup.send(f"Error: {e}")
+                    await interaction.edit_original_response(content=f"Error: {e}")
                 else:
                     await interaction.response.send_message(f"Error: {e}", ephemeral=True)
 
@@ -411,6 +411,7 @@ class ClaudeCodeBot:
 
         session.running = True
         session.message_count += 1
+        logger.info("Processing message for channel %s (msg #%d)", channel_id, session.message_count)
 
         consumer = DiscordStreamConsumer(
             channel=channel, reference=reference,

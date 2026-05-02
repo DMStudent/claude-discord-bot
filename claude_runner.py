@@ -116,9 +116,11 @@ class ClaudeGateway:
         on_event: Optional[Callable[[ClaudeEvent], Awaitable[None]]] = None,
     ) -> ClaudeResult:
         if not self._connected or not self._client:
+            logger.info("Query (new connection): %d chars", len(prompt))
             await self.connect(prompt)
             return await self._receive(on_event)
         else:
+            logger.info("Query (existing connection): %d chars", len(prompt))
             await self._client.query(prompt)
             return await self._receive(on_event)
 
@@ -128,10 +130,16 @@ class ClaudeGateway:
     ) -> ClaudeResult:
         result = ClaudeResult()
         assert self._client is not None
+        event_count = 0
+        last_log_count = 0
 
         async for msg in self._client.receive_response():
+            event_count += 1
             event = self._adapt(msg)
             if not event:
+                if event_count - last_log_count >= 50:
+                    logger.debug("Received %d SDK messages so far (type=%s)", event_count, type(msg).__name__)
+                    last_log_count = event_count
                 continue
 
             if on_event:
@@ -145,6 +153,7 @@ class ClaudeGateway:
                 if event.session_id:
                     self.session_id = event.session_id
 
+        logger.info("Receive complete: %d SDK messages, result=%d chars", event_count, len(result.text))
         return result
 
     @staticmethod

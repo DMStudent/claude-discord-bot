@@ -51,6 +51,7 @@ class DiscordStreamConsumer:
         self._thinking_accumulated = ""
         self._thinking_message: Optional[discord.Message] = None
         self._last_thinking_edit_time = 0.0
+        self._thinking_indicator_shown = False
         # Task progress
         self._task_status_msg: Optional[discord.Message] = None
         # File tracking
@@ -71,11 +72,16 @@ class DiscordStreamConsumer:
                 self._full_text += text
                 await self._maybe_edit()
 
-        elif event.thinking_delta and self._config.show_thinking:
+        elif event.thinking_delta:
             text = strip_ansi(event.thinking_delta)
             if text:
                 self._thinking_accumulated += text
-                await self._show_thinking()
+                if self._config.show_thinking:
+                    await self._show_thinking()
+                elif not self._thinking_indicator_shown:
+                    self._thinking_indicator_shown = True
+                    self._progress_lines.append("💭 Thinking...")
+                    await self._update_progress()
 
         elif event.tool_use and event.tool_use.get("name") and event.type != "tool_use_complete":
             # content_block_start: just mark tool phase, don't display yet
