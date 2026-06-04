@@ -29,9 +29,9 @@ discord_adapter.py       消息路由、安全校验、附件处理、斜杠命�
 session_manager.py       每频道持有一个 ClaudeGateway（持久连接）
     |
     v
-claude_runner.py         ClaudeGateway -> ClaudeSDKClient
+claude_runner.py         ClaudeGateway（封装 ClaudeSDKClient）
     |                    connect() 建立连接，query() 发送消息
-    |                    receive_response() 接收流式事件
+    |                    _receive() 接收流式事件
     v
 stream_consumer.py       text_delta / thinking / task progress -> Discord 消息编辑
     |
@@ -118,7 +118,7 @@ python bot.py
 | `CLAUDE_WORKING_DIR` | 当前目录 | Claude Code 工作目录 |
 | `CLAUDE_MODEL` | (空=默认) | 模型，如 `sonnet`、`opus` |
 | `CLAUDE_PERMISSION_MODE` | `default` | 权限模式。建议 `auto` |
-| `CLAUDE_MAX_BUDGET_USD` | `0` (无限) | 单次会话费用上限 |
+| `CLAUDE_MAX_BUDGET_USD` | `0`（不限制） | 单次会话费用上限 |
 | `CLAUDE_ALLOWED_TOOLS` | (空=全部) | 限制可用工具，如 `Read,Glob,Grep,WebSearch` |
 | `CLAUDE_SYSTEM_PROMPT` | (空) | 自定义系统提示词 |
 
@@ -200,7 +200,7 @@ python bot.py
 | `/sessions` | 列出最近的历史会话 |
 | `/resume <id>` | 恢复历史会话（支持前 8 位短 ID） |
 | `/model <name>` | 运行时切换模型（如 `sonnet`、`opus`） |
-| `/effort <level>` | 设置思考深度（low/medium/high/max） |
+| `/effort <level>` | 设置思考深度（low/medium/high/max），下次新建会话或 `/reset` 后生效 |
 | `/session-name <name>` | 为当前会话命名 |
 
 ## 项目结构

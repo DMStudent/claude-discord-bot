@@ -1,7 +1,7 @@
 [project]
 name = "claude-discord-bot"
 version = "0.1.0"
-description = "Discord bot wrapping Claude Code CLI with full capabilities"
+description = "通过 Discord 使用完整 Claude Code 能力的 Bot"
 requires-python = ">=3.11"
 dependencies = [
     "discord.py>=2.3.0",
