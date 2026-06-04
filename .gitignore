@@ -84,3 +84,8 @@ Desktop.ini
 
 # Cursor specific
 .cursor/
+
+# Project runtime
+.bot.pid
+log/
+.discord-uploads/
